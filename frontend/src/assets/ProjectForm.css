@@ -1,0 +1,150 @@
+/* Tu sección de estilos CSS se mantiene exactamente igual */
+.project-form-card {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 800px;
+  width: 100%;
+}
+
+.card-title {
+  color: #2c5885;
+  font-size: 2em;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.card-description {
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.5;
+  font-size: 1.1em;
+}
+
+.form-section {
+  text-align: left;
+  margin-bottom: 40px;
+  border: 1px solid #eee;
+  padding: 25px;
+  border-radius: 8px;
+  background-color: #fcfcfc;
+}
+
+.form-section h3 {
+  color: #2c5885;
+  font-size: 1.6em;
+  margin-top: 0;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: 500;
+  font-size: 1.1em;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.input-field:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.select-field {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%204%205%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M2%200L0%202h4zm0%205L0%203h4z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 8px 10px;
+  padding-right: 30px;
+}
+
+.textarea-field {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.button-group {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  /* Añadido gap para separación entre botones si hay varios */
+}
+
+/* Nuevo estilo para el botón secundario */
+.btn-secondary {
+  background-color: #e0e0e0;
+  color: #555;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 6px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #d0d0d0;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 6px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.btn-primary:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.loading-message,
+.error-message,
+.success-message {
+  margin-top: 20px;
+  font-size: 1em;
+  font-weight: 500;
+}
+
+.error-message {
+  color: #dc3545;
+}
+
+.success-message {
+  color: #28a745;
+}
+
+/* Estilo para agrupar botones de acción de éxito */
+.success-action-group {
+  margin-top: 20px;
+  /* Separación del mensaje de éxito */
+}

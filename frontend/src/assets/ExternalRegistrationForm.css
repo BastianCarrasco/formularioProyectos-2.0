@@ -1,0 +1,225 @@
+/* src/assets/ExternalRegistrationForm.css */
+
+.external-registration-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  max-width: 900px; /* Ajusta según sea necesario para la foto */
+  margin: 50px auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Fuente similar a la imagen */
+  color: #333;
+}
+
+.card-title {
+  color: #3f6087; /* Azul más oscuro para el título principal */
+  font-size: 2.2em;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600; /* Ligeramente más negrita */
+}
+
+.card-description {
+  color: #555;
+  font-size: 1.05em;
+  text-align: center;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  gap: 30px; /* Espacio entre las columnas */
+  margin-bottom: 30px;
+}
+
+.form-column {
+  padding: 20px;
+  /* El borde sutil no se ve en la imagen original, lo quito */
+  /* border: 1px solid #eee; */
+  border-radius: 8px;
+  background-color: #fcfcfc; /* Un fondo muy ligero para las columnas */
+}
+
+h3 {
+  color: #3f6087; /* Color para los subtítulos de Paso 1 y Paso 2 */
+  font-size: 1.3em;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  /* El borde inferior que tenía no está en la foto, lo quito */
+  /* border-bottom: 2px solid #e0e0e0; */
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500; /* Menos negrita que el título */
+  color: #555;
+  font-size: 0.95em;
+}
+
+.required {
+  color: #e74c3c; /* Color rojo para el asterisco */
+  margin-left: 3px;
+  font-weight: bold;
+}
+
+.input-field,
+.select-field {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc; /* Borde gris más claro */
+  border-radius: 4px; /* Bordes ligeramente más suaves */
+  font-size: 1em;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-field:focus,
+.select-field:focus {
+  border-color: #007bff; /* Azul al enfocar */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Sombra de enfoque */
+  outline: none;
+}
+
+/* Estilo específico para el select para replicar la flecha */
+.select-field {
+  -webkit-appearance: none; /* Oculta la flecha por defecto en WebKit */
+  -moz-appearance: none; /* Oculta la flecha por defecto en Firefox */
+  appearance: none; /* Oculta la flecha por defecto */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 20px;
+  padding-right: 35px; /* Deja espacio para la flecha personalizada */
+}
+
+.add-unit-button {
+  background-color: #e0e0e0; /* Gris claro como en la imagen */
+  color: #333;
+  border: 1px solid #c2c2c2; /* Borde ligeramente más oscuro */
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 0.95em;
+  cursor: pointer;
+  margin-top: 15px; /* Más espacio debajo del select */
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  min-width: 180px; /* Ancho fijo para que se vea como en la imagen */
+}
+
+.add-unit-button:hover {
+  background-color: #d0d0d0;
+  border-color: #b0b0b0;
+}
+
+.form-actions-bottom {
+  display: flex;
+  justify-content: space-between; /* Mueve los botones a los extremos */
+  margin-top: 40px; /* Más espacio arriba */
+  padding-top: 25px; /* Más padding arriba */
+  border-top: 1px solid #f0f0f0; /* Línea separadora muy sutil */
+}
+
+.btn-volver,
+.btn-submit {
+  border: none;
+  border-radius: 5px;
+  padding: 12px 30px; /* Más padding para que sean más grandes */
+  font-size: 1.05em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  font-weight: 500;
+}
+
+.btn-volver {
+  background-color: #e0e0e0; /* Gris claro */
+  color: #333;
+}
+
+.btn-volver:hover {
+  background-color: #d0d0d0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-submit {
+  background-color: #c9c9c9; /* Gris más oscuro para el botón deshabilitado inicial */
+  color: #888; /* Color de texto más claro para deshabilitado */
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #0069d9; /* Azul más oscuro al pasar el mouse cuando está habilitado */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-submit:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 1; /* Para que no se vea translúcido si la imagen no lo muestra así */
+  color: #888; /* Color del texto gris para deshabilitado */
+  box-shadow: none;
+}
+
+/* Estilo para cuando el botón de submit esté habilitado */
+.btn-submit:not(:disabled) {
+  background-color: #007bff; /* Azul vibrante cuando está habilitado */
+  color: white;
+}
+
+/* Estilos para el Modal (overlay y contenido del modal) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px; /* Más padding para el modal */
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+  width: 90%;
+  max-width: 550px; /* Ancho para el modal */
+  position: relative;
+}
+
+/* Estilos específicos para el AddUnitForm dentro del modal */
+/* Si ya tienes estilos scoped en AddUnitForm.vue, se aplicarán.
+   Estos son solo si necesitas sobreescribir algo a nivel de cómo se ve DENTRO del modal */
+.modal-content .add-unit-form-modal-content h2 {
+  color: #3f6087; /* Coherente con el título principal */
+  font-size: 1.6em;
+  margin-bottom: 20px;
+}
+
+.modal-content .add-unit-form-modal-content .btn-cancel {
+  background-color: #6c757d; /* Gris para cancelar */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+.modal-content .add-unit-form-modal-content .btn-cancel:hover {
+  background-color: #5a6268;
+}
+
+.modal-content .add-unit-form-modal-content .btn-save {
+  background-color: #28a745; /* Verde para guardar */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+.modal-content .add-unit-form-modal-content .btn-save:hover {
+  background-color: #218838;
+}

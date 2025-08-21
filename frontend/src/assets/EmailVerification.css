@@ -1,0 +1,117 @@
+/* src/assets/EmailVerification.css */
+
+.email-verification-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  max-width: 550px; /* Ancho ajustado para la verificación de email */
+  margin: 50px auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  text-align: center; /* Centrar el contenido de la tarjeta */
+}
+
+.card-title {
+  color: #3f6087;
+  font-size: 2em;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.card-description {
+  color: #555;
+  font-size: 1.05em;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.form-group {
+  margin-bottom: 25px;
+  text-align: left; /* Alinea la etiqueta y el input a la izquierda */
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+  font-size: 1em;
+}
+
+.email-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1.05em;
+  box-sizing: border-box; /* Incluye padding y borde en el width */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.email-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between; /* Espacia los botones */
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.btn-primary,
+.btn-secondary {
+  border: none;
+  border-radius: 5px;
+  padding: 12px 25px;
+  font-size: 1.05em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  font-weight: 500;
+}
+
+.btn-secondary {
+  background-color: #6c757d; /* Gris para el botón "Volver" */
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background-color: #007bff; /* Azul para el botón principal */
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0056b3;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.8; /* Ligeramente transparente */
+  color: #888;
+}
+
+.error-message {
+  color: #dc3545; /* Rojo para mensajes de error */
+  font-size: 0.9em;
+  margin-top: 8px;
+  text-align: left; /* Alinea el mensaje de error con el input */
+  font-weight: 500;
+}
+
+.success-message {
+  color: #28a745; /* Verde para mensajes de éxito */
+  font-size: 1em;
+  margin-top: 20px;
+  font-weight: 500;
+}

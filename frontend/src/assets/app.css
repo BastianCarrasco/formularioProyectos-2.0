@@ -1,0 +1,114 @@
+/* Estilos globales y de layout deben quedarse o moverse aquí,
+   los específicos de la tarjeta de acceso deben estar en AccessVerification.vue */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  /* Light grey background */
+  font-family: sans-serif;
+  /* Or a specific font if you have one */
+}
+
+/* Header Styles */
+.header {
+  background-color: #2c5885;
+  /* Dark blue */
+  color: white;
+  padding: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.header-logos {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  /* Space between logos */
+  margin-right: 30px;
+}
+
+.faculty-logo {
+  height: 60px;
+  /* Adjust as needed */
+}
+
+.pucv-logo {
+  height: 70px;
+  /* Adjust as needed */
+}
+
+.header-title {
+  margin: 0;
+  font-size: 1.8em;
+  font-weight: 500;
+}
+
+/* Main Content Styles */
+.main-content {
+  flex-grow: 1;
+  /* Makes sure the main content takes up available space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* Footer Styles */
+.footer {
+  background-color: #2c5885;
+  /* Dark blue */
+  color: white;
+  padding: 20px 0;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.footer-upper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  /* Space between logos */
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  /* Allow wrapping on smaller screens */
+  padding: 0 20px;
+}
+
+.footer-pucv-logo {
+  height: 60px;
+  /* Adjust as needed */
+}
+
+.acreditacion-logo,
+.cna-logo,
+.g9-logo {
+  height: 40px;
+  /* Adjust as needed for smaller logos */
+}
+
+.footer-lower {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  /* Allow wrapping */
+  gap: 10px 30px;
+  /* Vertical and horizontal gap */
+  padding: 0 20px;
+}
