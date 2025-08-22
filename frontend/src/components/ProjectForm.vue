@@ -1,7 +1,7 @@
 <template>
     <div class="project-form-card">
-        <!-- El saludo y la descripción se mantienen igual -->
-        <h2 class="card-title">Bienvenido/a, {{ academicName }}</h2>
+        <!-- Saludo dinámico basado en el nombre del usuario logueado -->
+        <h2 class="card-title">Bienvenido/a, {{ userName }}</h2>
         <p class="card-description">
             Favor contestar las siguientes preguntas, de forma muy breve (que el
             documento final no sea más de 3 planas). No es obligatorio contestar
@@ -69,19 +69,20 @@
 </template>
 
 <script>
-import { useAuthStore } from '../stores/auth';
+import { useAuthStore } from '../stores/auth'; // Importa tu store
 import '../assets/ProjectForm.css';
 
 export default {
     name: 'ProjectForm',
     data() {
         const authStore = useAuthStore();
-        const academicNameFromStore = authStore.academicFullName || 'Académico';
-        const investigatorFullNameFromStore = authStore.academicFullName || '';
+        // Obtener el nombre completo del usuario si está disponible
+        const userFullName = authStore.user
+            ? `${authStore.user.nombre || ''} ${authStore.user.a_paterno || ''}`.trim()
+            : 'Usuario';
 
         return {
-            academicName: academicNameFromStore,
-            academicEmail: authStore.academicEmail || '',
+            userName: userFullName, // Usar este para el saludo
             academicUnits: [],
             questions: [],
             loadingQuestions: true,
@@ -91,8 +92,8 @@ export default {
             submitSuccess: false, // Controla la visibilidad del formulario y del botón de retorno
             project: {
                 titulo: '',
-                investigador: investigatorFullNameFromStore,
-                escuela: '',
+                investigador: userFullName, // El investigador ahora es el nombre completo del usuario logueado
+                escuela: '', // Se poblará con la unidad académica seleccionada
                 respuestas: [],
             },
             URL_UA: import.meta.env.VITE_URL_UA,
@@ -102,16 +103,27 @@ export default {
     },
     computed: {
         isFormValid() {
-            return this.project.titulo && this.project.escuela;
+            // Asegúrate de que el título y la escuela (unidad académica) estén seleccionados
+            return this.project.titulo.trim() !== '' && this.project.escuela.trim() !== '';
         },
     },
     async created() {
         const authStore = useAuthStore();
-        if (!authStore.academicFullName || !authStore.academicEmail) {
-            console.warn('ProjectForm cargado sin información de académico en el store. Redirigiendo a verificación de email.');
+
+        // Validar que hay un usuario autenticado y su rol para mostrar el formulario
+        if (!authStore.isAuthenticated || !authStore.user) {
+            console.warn('ProjectForm cargado sin usuario autenticado. Redirigiendo a verificación de email.');
             this.$router.push('/verify-email');
             return;
         }
+
+        // Si el usuario ya tiene una unidad académica asociada en su perfil, precargarla
+        // Esto asume que el objeto `user` en el store tiene una propiedad `unidad`
+        if (authStore.user.unidad) {
+            this.project.escuela = authStore.user.unidad;
+        }
+
+        // Cargar unidades académicas y preguntas en paralelo
         await Promise.all([this.fetchAcademicUnits(), this.fetchQuestions()]);
     },
     methods: {
@@ -124,6 +136,7 @@ export default {
                 this.academicUnits = await response.json();
             } catch (error) {
                 console.error('Error al cargar unidades académicas:', error);
+                // Opcional: Establecer un mensaje de error visible al usuario
             }
         },
         async fetchQuestions() {
@@ -136,6 +149,7 @@ export default {
                 }
                 const data = await response.json();
                 this.questions = data.sort((a, b) => a.numero - b.numero);
+                // Inicializar el array de respuestas con cadenas vacías para cada pregunta
                 this.project.respuestas = Array(this.questions.length).fill('');
             } catch (error) {
                 console.error('Error al cargar preguntas:', error);
@@ -150,17 +164,23 @@ export default {
             this.submitMessage = '';
             this.submitSuccess = false;
 
+            // Mapear respuestas, incluyendo un valor predeterminado si están vacías
             const finalResponses = this.project.respuestas.map((respuesta, index) => {
                 const questionNumber = this.questions[index]?.numero || (index + 1);
-
                 return respuesta && respuesta.trim() !== ''
                     ? respuesta.trim()
-                    : `Pregunta ${questionNumber} sin responder`;
+                    : `Pregunta ${questionNumber} sin responder`; // Puedes cambiar esto a un string vacío si el backend lo prefiere
             });
 
+            // Preparar el payload del proyecto
             const projectPayload = {
-                ...this.project,
+                titulo: this.project.titulo,
+                investigador: this.project.investigador, // Nombre del usuario logueado
+                escuela: this.project.escuela, // Unidad académica seleccionada
                 respuestas: finalResponses,
+                email_autor: useAuthStore().user.email, // Añade el email del autor del store
+                // Puedes añadir el ID del autor si tu backend lo necesita
+                // id_autor: useAuthStore().user._id,
             };
 
             console.log('ProjectForm: Datos POST a enviar:', JSON.stringify(projectPayload, null, 2));
@@ -175,22 +195,27 @@ export default {
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('Error del backend (status ' + response.status + '):', errorData);
-                    throw new Error(
-                        errorData.message || errorData.error || `HTTP error! status: ${response.status}`
-                    );
+                    let errorMessage = `Error HTTP: ${response.status}`;
+                    try {
+                        const errorData = await response.json();
+                        errorMessage =
+                            errorData.message || errorData.error || response.statusText;
+                    } catch (jsonError) {
+                        console.warn(
+                            'La respuesta de error no fue JSON:',
+                            response.statusText
+                        );
+                    }
+                    throw new Error(`Error al guardar el proyecto: ${errorMessage}`);
                 }
 
                 const result = await response.json();
-                this.submitSuccess = true; // Establece el éxito
+                this.submitSuccess = true;
                 this.submitMessage = 'Proyecto guardado con éxito!';
                 console.log('Proyecto guardado:', result);
-
-                // Ya no limpiar el formulario ni redirigir aquí, el botón lo hará
             } catch (error) {
                 this.submitSuccess = false;
-                this.submitMessage = `Error al guardar el proyecto: ${error.message}`;
+                this.submitMessage = error.message; // Mostrar el mensaje de error directamente
                 console.error('Error al guardar el proyecto:', error);
             } finally {
                 this.isSubmitting = false;
@@ -198,7 +223,7 @@ export default {
         },
         goToHomePage() {
             const authStore = useAuthStore();
-            authStore.clearAcademicInfo(); // Limpia la información del académico al volver
+            authStore.clearAuthInfo(); // Limpia TODA la información de autenticación del store
             this.$router.push('/'); // Redirige a la página principal
         },
     },

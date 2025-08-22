@@ -1,35 +1,66 @@
+// stores/auth.js
 import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    // Aquí guardaremos la información del académico
-    academicFullName: "", // Para guardar "Nombre ApellidoPaterno"
-    academicEmail: "",
-    academicId: null, // Para guardar el _id si es necesario
-    // Puedes añadir más campos de academicInfo si los necesitas globalmente
+    user: null, // Guardará el objeto completo del usuario (académico o estudiante)
+    userRole: null, // 'academico' o 'estudiante'
+    isAuthenticated: false, // Para saber si hay un usuario autenticado
   }),
   actions: {
-    // Acción para guardar la información del académico verificado
+    // Acción para guardar la información del académico
     setAcademicInfo(academic) {
-      this.academicFullName = `${academic.nombre || ""} ${
-        academic.a_paterno ? academic.a_paterno : ""
-      }`.trim();
-      this.academicEmail = academic.email;
-      this.academicId = academic._id; // Guarda el ID si es relevante
+      this.user = {
+        _id: academic._id,
+        nombre: academic.nombre,
+        a_paterno: academic.a_paterno,
+        a_materno: academic.a_materno,
+        email: academic.email,
+        unidad: academic.unidad, // Asumiendo que esta propiedad existe en ambos
+        // Puedes copiar otros campos relevantes del académico si es necesario
+      };
+      this.userRole = "academico";
+      this.isAuthenticated = true;
       console.log(
         "Pinia Store: Información de académico guardada:",
-        this.academicFullName
+        this.user.nombre,
+        this.user.a_paterno
       );
     },
-    // Acción para limpiar la información (ej. al cerrar sesión)
-    clearAcademicInfo() {
-      this.academicFullName = "";
-      this.academicEmail = "";
-      this.academicId = null;
-      console.log("Pinia Store: Información de académico limpiada.");
+
+    // Nueva acción para guardar la información del estudiante (¡esta es la que faltaba!)
+    setStudentInfo(student) {
+      this.user = {
+        _id: student._id,
+        nombre: student.nombre,
+        a_paterno: student.a_paterno,
+        a_materno: student.a_materno,
+        email: student.email,
+        unidad: student.unidad, // Asumiendo que esta propiedad existe en ambos
+        // Puedes copiar otros campos relevantes del estudiante si es necesario
+      };
+      this.userRole = "estudiante";
+      this.isAuthenticated = true;
+      console.log(
+        "Pinia Store: Información de estudiante guardada:",
+        this.user.nombre,
+        this.user.a_paterno
+      );
+    },
+
+    // Acción para establecer el rol (opcional, ya se hace en setAcademicInfo/setStudentInfo)
+    setUserRole(role) {
+      this.userRole = role;
+    },
+
+    // Acción para limpiar toda la información de autenticación
+    clearAuthInfo() {
+      this.user = null;
+      this.userRole = null;
+      this.isAuthenticated = false;
+      console.log("Pinia Store: Información de autenticación limpiada.");
     },
   },
   // Opcional: Persistencia con Pinia-Plugin-Persistedstate (si quieres que sobreviva a recargas)
-  // Añadir al store o globalmente:
   // persist: true,
 });

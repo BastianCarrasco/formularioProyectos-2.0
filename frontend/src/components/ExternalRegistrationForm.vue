@@ -68,7 +68,7 @@
             <div class="form-actions-bottom">
                 <button type="button" class="btn-volver" @click="goBack">Volver</button>
                 <button type="submit" class="btn-submit" :disabled="!isFormValid">
-                    Registrar y Acceder al Cuestionario
+                    Registrar y Acceder a Verificador.
                 </button>
             </div>
         </form>
@@ -87,13 +87,16 @@ export default {
             unitsError: '',
             formData: {
                 userRole: '', // Nuevo campo para 'estudiante' o 'academico'
-                selectedUnitId: '',
+                selectedUnitId: '', // Esto ahora será el ID para enviar al backend
                 nombre: '',
                 apellidoPaterno: '',
                 apellidoMaterno: '',
                 correoElectronico: '',
             },
             URL_UA: import.meta.env.VITE_URL_UA, // URL para unidades académicas
+            // Nuevas URLs para registro
+            URL_ESTUDIANTES: import.meta.env.VITE_URL_ESTUDIANTES,
+            URL_ACADEMICOS: import.meta.env.VITE_URL_ACADEMICOS,
         };
     },
     computed: {
@@ -106,6 +109,17 @@ export default {
                 this.formData.correoElectronico.trim() !== '' &&
                 this.isValidEmail(this.formData.correoElectronico)
             );
+        },
+        // Computed property to get the selected unit's name for the 'unidad' field
+        selectedUnitNameForSubmission() {
+            if (this.formData.selectedUnitId) {
+                // Since v-model is bound to unit.nombre, formData.selectedUnitId already holds the name.
+                // We just need to ensure it's not an empty string if "Ninguna" was selected.
+                return this.formData.selectedUnitId !== ''
+                    ? this.formData.selectedUnitId
+                    : '';
+            }
+            return ''; // Return empty string if no unit is selected or if "Ninguna" is the value
         },
     },
     async created() {
@@ -140,18 +154,90 @@ export default {
         goBack() {
             this.$router.go(-1);
         },
-        registerAndAccess() {
-            if (this.isFormValid) {
-                console.log('Datos del formulario de registro externo:', this.formData);
-                alert(
-                    `Registro de colaborador externo (${this.formData.userRole}) exitoso. Redirigiendo al cuestionario.`
-                );
-                // Aquí iría la lógica para enviar los datos al backend
-                // this.$router.push('/cuestionario-externo');
-            } else {
+        async registerAndAccess() {
+            if (!this.isFormValid) {
                 alert(
                     'Por favor, completa todos los campos requeridos y asegúrate que el email sea válido.'
                 );
+                return;
+            }
+
+            this.loadingUnits = true; // Usamos loadingUnits para indicar el estado de la solicitud
+            this.unitsError = ''; // Limpiamos cualquier error previo
+
+            try {
+                let url = '';
+                let payload = {
+                    nombre: this.formData.nombre,
+                    email: this.formData.correoElectronico, // Mapeado a 'email'
+                    a_paterno: this.formData.apellidoPaterno, // Mapeado a 'a_paterno'
+                    a_materno: this.formData.apellidoMaterno || '', // Mapeado a 'a_materno', asegurar string vacío si es null/undefined
+                    unidad: this.selectedUnitNameForSubmission, // Mapeado a 'unidad'
+                    link_foto: '', // Dejado vacío como se solicitó
+                };
+
+                if (this.formData.userRole === 'estudiante') {
+                    url = this.URL_ESTUDIANTES;
+                } else if (this.formData.userRole === 'academico') {
+                    url = this.URL_ACADEMICOS;
+                    // Asegurarse de que la unidad no sea vacía para académicos si es un campo requerido en el backend
+                    if (!payload.unidad && this.formData.selectedUnitId !== '') {
+                        throw new Error(
+                            'Por favor, selecciona una Unidad Académica para el rol de Académico.'
+                        );
+                    }
+                } else {
+                    throw new Error(
+                        'Tipo de colaborador no válido. Por favor, selecciona Estudiante o Académico.'
+                    );
+                }
+
+                if (!url) {
+                    throw new Error('URL de registro no definida.');
+                }
+
+                console.log(`Enviando a ${url} con payload:`, payload);
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (!response.ok) {
+                    let errorMessage = `Error HTTP: ${response.status}`;
+                    try {
+                        const errorData = await response.json();
+                        errorMessage =
+                            errorData.message ||
+                            errorData.error ||
+                            response.statusText;
+                    } catch (jsonError) {
+                        // If response is not JSON, use default error message
+                        console.warn(
+                            'Response was not JSON for error:',
+                            response.statusText
+                        );
+                    }
+                    throw new Error(`Error al registrar: ${errorMessage}`);
+                }
+
+                const result = await response.json();
+                console.log('Registro exitoso:', result);
+
+                alert(
+                    `Registro de colaborador externo (${this.formData.userRole}) exitoso. Redirigiendo al verificador de correo.`
+                );
+                // REDIRECCIÓN SOLICITADA
+                this.$router.push('/verify-email');
+            } catch (error) {
+                console.error('Error en el registro:', error);
+                this.unitsError = `Error al registrar: ${error.message}`;
+                alert(this.unitsError);
+            } finally {
+                this.loadingUnits = false;
             }
         },
     },
